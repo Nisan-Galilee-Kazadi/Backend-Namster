@@ -24,8 +24,8 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
   maxAge: 86400,
 }));
-// Explicitly handle preflight for all API routes
-app.options('/api/*', cors());
+// Handle all API subpaths
+app.options('/api/:all(*)', cors());
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
@@ -277,5 +277,5 @@ app.get('/api/download/:sid', (req, res) => {
 app.get('/health', (req, res) => res.json({ ok: true }));
 
 app.listen(port, () => {
-  console.log(`Namster server running at http://localhost:${port}`);
+  console.log(`Lampramp server running at http://localhost:${port}`);
 });
