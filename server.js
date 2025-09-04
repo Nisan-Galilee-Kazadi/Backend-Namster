@@ -16,21 +16,19 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const port = process.env.PORT || 3000;
 
-// CORS for frontend hosted on another domain (e.g., Netlify)
-// If you know your exact frontend origin, replace '*' with that origin for tighter security.
-app.use(cors({
+// CORS middleware
+const corsOptions = {
   origin: '*',
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-  maxAge: 86400,
-}));
-// Handle all API subpaths with wildcard
-app.options('/api/*', (req, res) => {
-  res.set('Access-Control-Allow-Origin', '*');
-  res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.status(200).end();
-});
+  maxAge: 86400
+};
+
+// Apply CORS to all routes
+app.use(cors(corsOptions));
+
+// Handle preflight for all routes
+app.options('*', cors(corsOptions));
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
