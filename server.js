@@ -8,14 +8,24 @@ import xlsx from 'xlsx';
 import mammoth from 'mammoth';
 import archiver from 'archiver';
 import crypto from 'crypto';
-
-//dddd
+import cors from 'cors';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+// CORS for frontend hosted on another domain (e.g., Netlify)
+// If you know your exact frontend origin, replace '*' with that origin for tighter security.
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  maxAge: 86400,
+}));
+// Explicitly handle preflight for all API routes
+app.options('/api/*', cors());
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
@@ -267,5 +277,5 @@ app.get('/api/download/:sid', (req, res) => {
 app.get('/health', (req, res) => res.json({ ok: true }));
 
 app.listen(port, () => {
-  console.log(`Lampramp server running at http://localhost:${port}`);
+  console.log(`Namster server running at http://localhost:${port}`);
 });
